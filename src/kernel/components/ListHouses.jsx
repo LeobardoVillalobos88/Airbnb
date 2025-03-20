@@ -3,10 +3,10 @@ import { Card, Image, AirbnbRating } from "@rneui/base";
 import React from "react";
 
 export default function ListHouses(props) {
-  const { images, name, description, price, rating, count, navigation } = props;
+  const { images, name, description, price, rating, count, navigation, direction } = props;
   //NOMBRE DEL COMPONENTE QUE AL DAR CLICK 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate("DetailPlaceStack", {place: {images, name, description, price, rating, count}})}>
+    <TouchableOpacity onPress={() => navigation.navigate("DetailPlaceStack", {place: {images, name, description, price, rating, count, direction}})}>
       <Card>
       <View style={{ flexDirection: "row" }}>
         <Image

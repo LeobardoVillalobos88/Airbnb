@@ -50,6 +50,7 @@ export default function Home(props) {
               rating={item.rating}
               count={item.count}
               navigation={navigation}
+              direction={item.direction}
             />
           )}
         />

@@ -1,20 +1,30 @@
 import React from 'react';
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import { StyleSheet, View } from 'react-native';
 
-export default function MapViewCustom() {
+export default function MapViewCustom(props) {
+  const {direction, latitudeDelta, longitudeDelta, width, height, name, description} = props;
   return (
     <View style={styles.container}>
       <MapView
-  initialRegion={{
-    latitude: 18.85053721727243,
-    longitude: -99.20064967336313,
-    latitudeDelta: 0.005,
-    longitudeDelta: 0.005,
-  }}
-    ZoomEnabled={true}
-    scrollEnabled={true}
-    style={styles.map} />
+        initialRegion={{
+          latitude: direction.latitude || 20.897141046579925,
+          longitude: direction.longitude || -99.2272682691106,
+          latitudeDelta: latitudeDelta || 0.005,
+          longitudeDelta: longitudeDelta || 0.005,
+        }}
+        ZoomEnabled={true}
+        scrollEnabled={true}
+        zoomControlEnabled={true}
+        style={{width: width || '95%', height: height || 384}}
+      >
+      <Marker
+        key={direction.latitude}
+        coordinate={{latitude: direction.latitude, longitude: direction.longitude}}
+        title={name}
+        description={description}
+      />
+      </MapView>
     </View>
   );
 }
@@ -22,10 +32,7 @@ export default function MapViewCustom() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  map: {
-    width: '95%',
-    height: 384,
+    alignItems: 'center',
   },
 });
 

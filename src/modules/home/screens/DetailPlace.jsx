@@ -34,7 +34,15 @@ export default function DetailPlace(props) {
           />
         </View>
         <Text style={{color:"gray", margin: 16}}>{place.description}</Text>
-        <MapViewCustom/>
+        <MapViewCustom 
+        direction={place.direction}
+          latitudeDelta={0.005}
+          longitudeDelta={0.005}
+          width={"90%"}
+          height={320}
+          name={place.name}
+          description={place.description}
+        />
       </ScrollView>
 
 
