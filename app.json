@@ -13,12 +13,22 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.utez.airbnbc",
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey":  "AIzaSyDyYIkFMt_6i2JWFqnNK3Uhn0GlqTjxkMY"
+        }
     },
     "android": {
+      "package": "com.utez.airbnbc",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCVhK9fG4WDGp6UKhkr5aUxh5FY85SgSsw"
+        }
       }
     },
     "web": {

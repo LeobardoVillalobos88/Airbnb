@@ -5,7 +5,16 @@ import { StyleSheet, View } from 'react-native';
 export default function MapViewCustom() {
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} />
+      <MapView
+  initialRegion={{
+    latitude: 18.85053721727243,
+    longitude: -99.20064967336313,
+    latitudeDelta: 0.005,
+    longitudeDelta: 0.005,
+  }}
+    ZoomEnabled={true}
+    scrollEnabled={true}
+    style={styles.map} />
     </View>
   );
 }
@@ -15,7 +24,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    width: '80%',
-    height: '256',
+    width: '95%',
+    height: 384,
   },
 });
+
