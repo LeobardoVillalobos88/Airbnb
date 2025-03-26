@@ -4,6 +4,7 @@ import React, { useLayoutEffect } from 'react'
 import PagerView from 'react-native-pager-view';
 import { map } from 'lodash';
 import MapViewCustom from '../../../kernel/components/MapViewCustom';
+import MapViewLocationCustom from '../../../kernel/components/MapViewLocationCustom';
 export default function DetailPlace(props) {
   const { place } = props.route.params;
   useLayoutEffect(() => {
@@ -43,6 +44,9 @@ export default function DetailPlace(props) {
           name={place.name}
           description={place.description}
         />
+        <View style={{ margin: 16 }}>
+          <MapViewLocationCustom />
+        </View>
       </ScrollView>
 
 
