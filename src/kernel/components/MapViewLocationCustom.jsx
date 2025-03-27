@@ -1,67 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import MapView, {Marker} from 'react-native-maps';
-import { StyleSheet, View } from 'react-native';
-import * as Location from 'expo-location';
+import React, { useState, useEffect, useRef } from "react";
+import MapView, { Marker } from "react-native-maps";
+import { StyleSheet, View } from "react-native";
+import * as Location from "expo-location";
 
 export default function MapViewLocationCustom() {
-  const [location, setLocation] = useState(null);
+  const [locations, setLocations] = useState([]);
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const locationSubscription = useRef(null);
 
-  let subscription;
+  const startTracking = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Permiso de ubicación denegado");
+      return;
+    }
 
-    const startTracking = async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permiso de ubicación denegado');
-        return;
+    locationSubscription.current = await Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.High,
+        timeInterval: 1000,
+        distanceInterval: 1,
+      },
+      (loc) => {
+        const newCoords = {
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+        };
+
+        setCurrentLocation(newCoords);
+        setLocations((prevLocations) => [...prevLocations, newCoords]); // Agregar nueva ubicación al historial
+        console.log("Nueva ubicación:", newCoords);
       }
-
-      subscription = await Location.watchPositionAsync(
-        {
-          accuracy: Location.Accuracy.High,
-          timeInterval: 1000,
-          distanceInterval: 1,
-        },
-        (loc) => {
-          setLocation(loc.coords);
-          cosole.log("MapViewLocationCustom ",loc.coords);
-        }
-      );
-    };
+    );
+  };
 
   useEffect(() => {
-
     startTracking();
-
     return () => {
-      if (subscription) subscription.remove();
+      if (locationSubscription.current) {
+        locationSubscription.current.remove();
+      }
     };
   }, []);
 
   return (
     <View style={styles.container}>
-      {
-        location && (
-          <MapView
-        initialRegion={{
-          latitude: location.latitude,
-          longitude: location.longitude,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
-        }}
-        ZoomEnabled={true}
-        scrollEnabled={true}
-        zoomControlEnabled={true}
-        style={{width:'95%', height: 384}}
-      >
-      <Marker
-        key={location.latitude}
-        coordinate={{latitude: location.latitude, longitude: location.longitude}}
-        title={"Ubicación actual"}
-        description={"Ubicacion actual del usuario"}
-      />
-      </MapView>
-        )
-      }
+      {currentLocation && (
+        <MapView
+          initialRegion={{
+            latitude: currentLocation.latitude,
+            longitude: currentLocation.longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          }}
+          style={styles.map}
+        >
+          {locations.map((loc, index) => (
+            <Marker
+              key={index}
+              coordinate={loc}
+              title={`Punto ${index + 1}`}
+              description={"Ubicación registrada"}
+              pinColor={index === locations.length - 1 ? "red" : "blue"}
+            />
+          ))}
+        </MapView>
+      )}
     </View>
   );
 }
@@ -69,7 +73,10 @@ export default function MapViewLocationCustom() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
+  },
+  map: {
+    width: "95%",
+    height: 400,
   },
 });
-
